@@ -106,7 +106,7 @@ def _clone(message, bot):
             LOGGER.info(f'Cloning Done: {name}')
         if is_gdtot:
             gd.deletefile(link)
-        elif is_appdrive:
+        If is_appdrive:
         if apdict.get('link_type') == 'login':
             LOGGER.info(f"Deleting: {link}")
             gd.deletefile(link)
