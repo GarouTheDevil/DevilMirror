@@ -106,10 +106,16 @@ def _clone(message, bot):
             LOGGER.info(f'Cloning Done: {name}')
         if is_gdtot:
             gd.deletefile(link)
-        If is_appdrive:
-        if apdict.get('link_type') == 'login':
-            LOGGER.info(f"Deleting: {link}")
-            gd.deletefile(link)
+        elif is_appdrive:
+            if apdict.get('link_type') == 'login':
+                LOGGER.info(f"Deleting: {link}")
+                gd.deletefile(link)
+        if MIRROR_LOGS:	
+            try:	
+                for chatid in MIRROR_LOGS:	
+                    bot.sendMessage(chat_id=chatid, text=result + cc, reply_markup=button, parse_mode=ParseMode.HTML)	
+            except Exception as e:	
+                LOGGER.warning(e)
     else:
         sendMessage("Send Gdrive link along with command or by replying to the link by command\n\n<b>Multi links only by replying to first link/file:</b>\n<code>/cmd</code> 10(number of links/files)", bot, message)
 
