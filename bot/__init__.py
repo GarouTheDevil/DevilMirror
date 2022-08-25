@@ -448,6 +448,20 @@ try:
     SEARCH_PLUGINS = jsonloads(SEARCH_PLUGINS)
 except:
     SEARCH_PLUGINS = None
+try:
+    CRYPT = getConfig('CRYPT')
+    if len(CRYPT) == 0:
+        raise KeyError
+except:
+    CRYPT = None
+try:
+    APPDRIVE_EMAIL = getConfig('APPDRIVE_EMAIL')
+    APPDRIVE_PASS = getConfig('APPDRIVE_PASS')
+    if len(APPDRIVE_EMAIL) == 0 or len(APPDRIVE_PASS) == 0:
+        raise KeyError
+except KeyError:
+    APPDRIVE_EMAIL = None
+    APPDRIVE_PASS = None
 
 updater = tgUpdater(token=BOT_TOKEN, request_kwargs={'read_timeout': 20, 'connect_timeout': 15})
 bot = updater.bot
