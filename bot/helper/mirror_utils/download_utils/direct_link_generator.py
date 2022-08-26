@@ -18,6 +18,7 @@ from bot import LOGGER, UPTOBOX_TOKEN, CRYPT, APPDRIVE_EMAIL, APPDRIVE_PASS
 from bs4 import BeautifulSoup
 from base64 import standard_b64encode
 from time import sleep
+from lxml import etree
 from bot.helper.ext_utils.bot_utils import is_gdtot_link, is_appdrive_link
 from bot.helper.ext_utils.exceptions import DirectDownloadLinkException
 
