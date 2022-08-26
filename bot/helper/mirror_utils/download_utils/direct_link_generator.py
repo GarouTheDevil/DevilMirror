@@ -401,6 +401,24 @@ def gdtot(url: str) -> str:
         raise DirectDownloadLinkException("ERROR: Try in your broswer, mostly file not found or user limit exceeded!")
     return f'https://drive.google.com/open?id={decoded_id}'
 
+def gofile(url: str) -> str:
+    try:
+        api_uri = 'https://api.gofile.io'
+        client = rsession()
+        res = client.get(f'{api_uri}/createAccount').json()
+        data = {
+            'contentId': url.split('/')[-1],
+            'token': res['data']['token'],
+            'websiteToken': 'websiteToken',
+            'cache': 'true'
+        }
+        res = client.get(f'{api_uri}/getContent', params=data).json()
+        content = list(res['data']['contents'].values())
+        return content[0]['directLink']
+    except:
+        raise DirectDownloadLinkException("ERROR: Error trying to generate Direct Link from gofile!")
+    return f'https://drive.google.com/open?id={decoded_id}'
+
 account = {
    'email': APPDRIVE_EMAIL,
     'passwd': APPDRIVE_PASS
@@ -416,6 +434,22 @@ def account_login(client, url, email, password):
         'password': password
     }
     client.post(f'https://{urlparse(url).netloc}/login', data=data)
+
+def gen_payload(data, boundary=f'{"-"*6}_'):
+    data_string = ''
+    for item in data:
+        data_string += f'{boundary}\r\n'
+        data_string += f'Content-Disposition: form-data; name="{item}"\r\n\r\n{data[item]}\r\n'
+    data_string += f'{boundary}--\r\n'
+    return data_string
+
+def parse_info(data):
+    info = re_findall(r'>(.*?)<\/li>', data)
+    info_parsed = {}
+    for item in info:
+        kv = [s.strip() for s in item.split(':', maxsplit=1)]
+        info_parsed[kv[0].lower()] = kv[1]
+    return info_parsed
 
 def appdrive(url: str) -> str:
     client = rsession()
