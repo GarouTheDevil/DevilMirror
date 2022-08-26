@@ -400,6 +400,22 @@ def gdtot(url: str) -> str:
         raise DirectDownloadLinkException("ERROR: Try in your broswer, mostly file not found or user limit exceeded!")
     return f'https://drive.google.com/open?id={decoded_id}'
 
+account = {
+   'email': APPDRIVE_EMAIL,
+    'passwd': APPDRIVE_PASS
+    }
+def account_login(client, url, email, password):
+    """ AppDrive google drive link generator
+    By https://github.com/xcscxr """
+
+    if APPDRIVE_EMAIL is None:
+        raise DirectDownloadLinkException("ERROR: Appdrive  Email Password not provided")
+    data = {
+        'email': email,
+        'password': password
+    }
+    client.post(f'https://{urlparse(url).netloc}/login', data=data)
+
 def appdrive(url: str) -> str:
     client = rsession()
     client.headers.update({
